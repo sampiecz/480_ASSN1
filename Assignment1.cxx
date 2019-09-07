@@ -19,10 +19,10 @@ using std::endl;
 int main()
 {
   // 1.
-  cout << "My PID is " << getpt() << "." << endl;
+  cout << "I am the original process. My PID is " << getpt() << " and my parent's PID is " << getppid() << "." << endl;
 
   // 2.
-  cout << "I am about to call fork()." << endl;
+  cout << "Now we have the first fork." << endl;
 
   // 3.
   try
