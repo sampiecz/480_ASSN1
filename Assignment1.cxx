@@ -19,87 +19,57 @@ using std::endl;
 int main()
 {
   // 1.
-  cout << "I am the original process. My PID is " << getpt() << " and my parent's PID is " << getppid() << "." << endl;
+  cout << "I am the original process. My PID is " << getpid() << " and my parent's PID is " << getppid() << "." << endl;
 
   // 2.
   cout << "Now we have the first fork." << endl;
 
   // 3.
-  try
-  {
-    fork();
-  }
-  catch (const std::exception& e)
+  int something = fork();
+  if (something == -1)
   {
     cout << "The first fork failed." << endl;
     exit(1);
   }
-
-  // 4. 
-  cout << "I am the child process." << endl;
-  cout << "My PID is " << getpt() << "." << endl;
-  cout << "My parent's PID is " << getppid() << endl;
-
-  // b.
-  try
+  else if(something == 0)
   {
+    // 4. 
+    cout << "I am the child process." << endl;
+    cout << "My PID is " << getpid() << "." << endl;
+    cout << "My parent's PID is " << getppid() << endl;
+
     // a.
-    fork();
+    // b.
+    int childPID = fork();
+
+    if (childPID == -1)
+    {
+      cout << "The second fork failed." << endl;
+      exit(1);
+    }
+    else if (childPID == 0)
+    {
+      cout << "I am the grandchild process. My PID is " << getgid() << " my parent's PID is " << getppid() << "." << endl;
+      cout << "I am going to exit." << endl;
+      exit(0);
+
+      cout << "I am the child process. My PID is " << getpid() << " my parent's PID is " << getppid() << "." << endl;
+      wait(0);
+      exit(0);
+    }
+    else
+    {
+      cout << "I am the parent process. My PID is " << getpid() << " my parent's PID is " << getppid() << "." << endl;
+      sleep(2);
+      cout << "I am going to call ps." << endl;
+      system("ps");
+      wait(0);
+      cout << "I am going to terminate." << endl;
+      exit(0);
+    }
+
   }
-  catch (const std::exception& e)
-  {
-    // c.
-    cout << "The second fork failed." << endl;
-    exit(1);
-  }
 
-  // d.
-  // i.
-  cout << "I am the grandchild process." << endl;
-  cout << "My PID is " << getgid() << "." << endl;
-  cout << "My parent's PID is " << getppid() << "." << endl;
-
-  // ii.
-  cout << "I am going to exit." << endl;
-
-  // iii.
-  exit(0);
-
-  // i.
-  cout << "I am the child process." << endl;
-  cout << "My PID is " << getpt() << "." << endl;
-  cout << "My parent's PID is " << getppid() << "." << endl;
-
-  // ii.
-  wait(0);
-
-  // iii.
-  cout << "I am going to exit." << endl;
-
-  // iv.
-  exit(0);
-
-  // a.
-  cout << "I am the parent process." << endl;
-  cout << "My PID is " << getpt() << "." << endl;
-  cout << "My parent's PID is " << getppid() << "." << endl;
-
-  // b.
-  sleep(2);
-
-  // c.
-  cout << "I am going to call ps." << endl;
-
-  // d.
-  system("ps");
-  
-  // e.
-  wait(0);
-
-  // f.
-  cout << "I am going to terminate." << endl;
-
-  // g.
-  exit(0);
+  return 0;
 
 }
