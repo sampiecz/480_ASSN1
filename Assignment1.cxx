@@ -18,13 +18,9 @@ using std::endl;
 
 int main()
 {
-  // 1.
   cout << "I am the original process. My PID is " << getpid() << " and my parent's PID is " << getppid() << "." << endl;
-
-  // 2.
   cout << "Now we have the first fork." << endl;
 
-  // 3.
   int something = fork();
   if (something == -1)
   {
@@ -33,13 +29,8 @@ int main()
   }
   else if(something == 0)
   {
-    // 4. 
-    cout << "I am the child process." << endl;
-    cout << "My PID is " << getpid() << "." << endl;
-    cout << "My parent's PID is " << getppid() << endl;
+    cout << "I am the child process. My PID is " << getpid() << " my parent's PID is " << getppid() << endl;
 
-    // a.
-    // b.
     int childPID = fork();
 
     if (childPID == -1)
@@ -52,22 +43,23 @@ int main()
       cout << "I am the grandchild process. My PID is " << getgid() << " my parent's PID is " << getppid() << "." << endl;
       cout << "I am going to exit." << endl;
       exit(0);
-
+    }
+    else
+    {
       cout << "I am the child process. My PID is " << getpid() << " my parent's PID is " << getppid() << "." << endl;
       wait(0);
       exit(0);
     }
-    else
-    {
-      cout << "I am the parent process. My PID is " << getpid() << " my parent's PID is " << getppid() << "." << endl;
-      sleep(2);
-      cout << "I am going to call ps." << endl;
-      system("ps");
-      wait(0);
-      cout << "I am going to terminate." << endl;
-      exit(0);
-    }
-
+  }
+  else
+  {
+    cout << "I am the parent process. My PID is " << getpid() << " my parent's PID is " << getppid() << "." << endl;
+    sleep(2);
+    cout << "I am going to call ps." << endl;
+    system("ps");
+    wait(0);
+    cout << "I am going to terminate." << endl;
+    exit(0);
   }
 
   return 0;
